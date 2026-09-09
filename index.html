@@ -1,0 +1,1603 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechParts Pro | Loja de Hardware & Assistente IA</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                        },
+                        darkbg: '#0b0f19',
+                        darkcard: '#111827',
+                        darkborder: '#1f2937'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0f19;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f2937;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0ea5e9;
+        }
+
+        /* Neon Glow Effects */
+        .glow-cyan {
+            box-shadow: 0 0 15px rgba(14, 165, 233, 0.35);
+        }
+        .glow-cyan-hover:hover {
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.5);
+        }
+        .glow-emerald {
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.35);
+        }
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        /* Animations */
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+        .pulse-bg {
+            animation: pulseGlow 4s infinite ease-in-out;
+        }
+
+        /* Hide Scrollbar helper */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-darkbg text-gray-100 antialiased selection:bg-brand-500 selection:text-white">
+
+    <header class="sticky top-0 z-40 glass-panel border-b border-darkborder shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('catalog')">
+                    <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center text-white shadow-lg glow-cyan">
+                        <i class="fa-solid fa-microchip text-2xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-brand-400">
+                            TECH<span class="text-brand-400">PARTS</span>
+                        </span>
+                        <span class="text-xs px-2 py-0.5 ml-1.5 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/30 font-mono font-semibold uppercase">PRO</span>
+                        <p class="text-[10px] text-gray-400 tracking-wider">HARDWARE & ASSISTENTE IA</p>
+                    </div>
+                </div>
+
+                <!-- Central Search Bar -->
+                <div class="hidden md:flex flex-1 max-w-md mx-8 relative">
+                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Buscar placas de vídeo, processadores, SSDs..." 
+                        class="w-full bg-gray-900/90 text-sm text-gray-200 pl-10 pr-4 py-2.5 rounded-xl border border-gray-700 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-gray-400"></i>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex items-center space-x-3 sm:space-x-4">
+                    <button onclick="switchTab('builder')" class="hidden sm:flex items-center space-x-2 bg-gradient-to-r from-purple-600 to-brand-600 hover:from-purple-500 hover:to-brand-500 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all shadow-md hover:scale-105">
+                        <i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i>
+                        <span>Monte seu PC</span>
+                    </button>
+
+                    <!-- Cart Button -->
+                    <button onclick="toggleCartModal()" class="relative bg-gray-800/80 hover:bg-gray-700 text-gray-200 p-2.5 rounded-xl border border-gray-700 transition-all">
+                        <i class="fa-solid fa-cart-shopping text-lg"></i>
+                        <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-brand-500 text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center hidden shadow-lg">0</span>
+                    </button>
+
+                    <!-- User Profile / Settings Button -->
+                    <button onclick="switchTab('settings')" title="Painel de Configurações" class="bg-gray-800/80 hover:bg-gray-700 text-gray-200 p-2.5 rounded-xl border border-gray-700 transition-all hover:text-brand-400">
+                        <i class="fa-solid fa-user-gear text-lg"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Search Bar -->
+            <div class="md:hidden pb-3">
+                <div class="relative">
+                    <input type="text" id="mobileSearchInput" oninput="handleMobileSearch()" placeholder="Buscar hardware..." 
+                        class="w-full bg-gray-900 text-sm text-gray-200 pl-10 pr-4 py-2 rounded-lg border border-gray-700 focus:outline-none focus:border-brand-500">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-400"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="bg-gray-900/60 border-b border-darkborder py-2 px-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between sm:justify-start space-x-2 sm:space-x-6 text-sm overflow-x-auto no-scrollbar">
+            <button onclick="switchTab('catalog')" id="nav-catalog" class="nav-btn active-tab flex items-center space-x-2 py-1.5 px-3 rounded-lg text-brand-400 font-medium bg-brand-500/10 border border-brand-500/20">
+                <i class="fa-solid fa-store"></i>
+                <span>Catálogo de Peças</span>
+            </button>
+            <button onclick="switchTab('builder')" id="nav-builder" class="nav-btn flex items-center space-x-2 py-1.5 px-3 rounded-lg text-gray-400 hover:text-gray-200 font-medium transition-colors">
+                <i class="fa-solid fa-sliders"></i>
+                <span>Verificador & Monte seu PC</span>
+            </button>
+            <button onclick="switchTab('orders')" id="nav-orders" class="nav-btn flex items-center space-x-2 py-1.5 px-3 rounded-lg text-gray-400 hover:text-gray-200 font-medium transition-colors">
+                <i class="fa-solid fa-box font-normal"></i>
+                <span>Rastrear Pedido</span>
+            </button>
+            <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn flex items-center space-x-2 py-1.5 px-3 rounded-lg text-gray-400 hover:text-gray-200 font-medium transition-colors">
+                <i class="fa-solid fa-gear"></i>
+                <span>Configurações</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Layout Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <div id="tab-catalog" class="tab-content space-y-8">
+            <!-- Hero Banner -->
+            <div class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-gray-900 via-darkcard to-brand-900/60 border border-darkborder p-6 sm:p-10 shadow-2xl">
+                <div class="absolute -right-12 -top-12 w-64 h-64 bg-brand-500/10 rounded-full blur-3xl pulse-bg"></div>
+                <div class="relative z-10 max-w-2xl space-y-4">
+                    <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                        <span>Especial de Hardware 2026</span>
+                    </div>
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                        Monte o PC dos seus sonhos com <span class="bg-clip-text text-transparent bg-gradient-to-r from-brand-400 to-emerald-400">Suporte de IA</span>
+                    </h1>
+                    <p class="text-gray-300 text-sm sm:text-base">
+                        Peças 100% originais com garantia nacional. Dúvidas na escolha do soquete ou fonte? Nosso assistente **CyberBot AI** analisa a compatibilidade para você em segundos.
+                    </p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <button onclick="switchTab('builder')" class="bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all shadow-lg glow-cyan hover:scale-105">
+                            <i class="fa-solid fa-gears mr-2"></i>Testar Compatibilidade
+                        </button>
+                        <button onclick="toggleChatModal(true)" class="bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-600 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all">
+                            <i class="fa-solid fa-robot text-brand-400 mr-2"></i>Falar com CyberBot AI
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Filter Bar -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-layer-group text-brand-400"></i> Categorias de Hardware
+                    </h2>
+                    <span id="productCount" class="text-xs text-gray-400 font-mono">Carregando produtos...</span>
+                </div>
+
+                <div class="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar" id="categoryFilterContainer">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Product Cards injected via JavaScript -->
+            </div>
+        </div>
+
+        <div id="tab-builder" class="tab-content hidden space-y-6">
+            <div class="bg-darkcard border border-darkborder rounded-2xl p-6 shadow-xl">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-darkborder pb-5">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-screwdriver-wrench text-brand-400"></i> Montador & Verificador de Compatibilidade
+                        </h2>
+                        <p class="text-sm text-gray-400 mt-1">Selecione os componentes e deixe nosso algoritmo testar soquetes, memórias e requisito de fonte.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="resetBuilder()" class="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-lg border border-gray-700 transition">
+                            <i class="fa-solid fa-rotate-left mr-1"></i> Reiniciar
+                        </button>
+                        <button onclick="askBotAboutBuild()" class="text-xs bg-gradient-to-r from-brand-600 to-purple-600 hover:from-brand-500 hover:to-purple-500 text-white px-3 py-2 rounded-lg font-semibold shadow transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i>
+                            <span>Pedir Avaliação da IA</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Compatibility Status Banner -->
+                <div id="compatibilityBanner" class="mt-4 p-4 rounded-xl border bg-emerald-500/10 border-emerald-500/30 text-emerald-300 flex items-start gap-3">
+                    <i class="fa-solid fa-circle-check text-xl text-emerald-400 mt-0.5"></i>
+                    <div>
+                        <h4 class="font-bold text-sm" id="compatTitle">Configuração Compatível</h4>
+                        <p class="text-xs text-gray-300 mt-0.5" id="compatDesc">Escolha os componentes abaixo para validar o setup.</p>
+                    </div>
+                </div>
+
+                <!-- Builder Steps / Slots -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+                    <!-- Left: Slots Selection -->
+                    <div class="lg:col-span-2 space-y-4" id="builderSlotsContainer">
+                        <!-- Slots generated dynamically -->
+                    </div>
+
+                    <!-- Right: Build Summary Card -->
+                    <div class="space-y-4">
+                        <div class="bg-gray-900/90 border border-darkborder rounded-xl p-5 sticky top-24 space-y-4">
+                            <h3 class="text-lg font-bold text-white border-b border-gray-800 pb-3 flex justify-between items-center">
+                                <span>Resumo do Setup</span>
+                                <i class="fa-solid fa-desktop text-brand-400"></i>
+                            </h3>
+
+                            <div class="space-y-2 text-xs text-gray-300">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Soquete CPU:</span>
+                                    <span id="summarySocket" class="font-mono font-semibold text-brand-400">Não selecionado</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Padrão Memória:</span>
+                                    <span id="summaryRamType" class="font-mono font-semibold text-brand-400">Não selecionado</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Consumo Estimado:</span>
+                                    <span id="summaryWatts" class="font-mono font-semibold text-amber-400">0 Watts</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Fonte Selecionada:</span>
+                                    <span id="summaryPsuWatts" class="font-mono font-semibold text-gray-300">0 Watts</span>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-gray-800 pt-4">
+                                <div class="flex justify-between items-end mb-4">
+                                    <span class="text-xs text-gray-400">Valor Total do PC:</span>
+                                    <span id="builderTotalPrice" class="text-2xl font-extrabold text-emerald-400 font-mono">R$ 0,00</span>
+                                </div>
+
+                                <button onclick="addBuildToCart()" id="addBuildToCartBtn" disabled class="w-full bg-brand-500 hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-bold py-3 rounded-xl transition shadow-lg glow-cyan">
+                                    <i class="fa-solid fa-cart-plus mr-2"></i>Adicionar PC ao Carrinho
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-orders" class="tab-content hidden space-y-6">
+            <div class="bg-darkcard border border-darkborder rounded-2xl p-6 max-w-2xl mx-auto shadow-xl">
+                <h2 class="text-2xl font-bold text-white mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-truck-fast text-brand-400"></i> Rastreamento de Pedido
+                </h2>
+                <p class="text-sm text-gray-400 mb-6">Digite o número do seu pedido para acompanhar o status de envio em tempo real.</p>
+
+                <div class="flex gap-2 mb-6">
+                    <input type="text" id="trackingOrderInput" placeholder="Ex: #TP-98231" class="flex-1 bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-gray-200 focus:outline-none focus:border-brand-500">
+                    <button onclick="trackOrder()" class="bg-brand-500 hover:bg-brand-600 text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition">
+                        Consultar
+                    </button>
+                </div>
+
+                <div id="trackingResult" class="hidden border border-gray-800 bg-gray-900/60 rounded-xl p-5 space-y-4">
+                    <!-- Dynamic tracking info -->
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-settings" class="tab-content hidden space-y-6">
+            <div class="bg-darkcard border border-darkborder rounded-2xl p-6 shadow-xl max-w-4xl mx-auto space-y-8">
+                
+                <!-- Settings Header -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-darkborder pb-5 gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-sliders text-brand-400"></i> Painel de Configurações
+                        </h2>
+                        <p class="text-sm text-gray-400 mt-1">Gerencie suas preferências do assistente IA, parâmetros do PC Builder e perfil.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="resetSettingsToDefault()" class="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3.5 py-2 rounded-xl border border-gray-700 transition">
+                            <i class="fa-solid fa-rotate-left mr-1"></i> Padrões
+                        </button>
+                        <button onclick="saveUserSettings()" class="text-xs bg-brand-500 hover:bg-brand-600 text-white font-bold px-4 py-2 rounded-xl shadow glow-cyan transition">
+                            <i class="fa-solid fa-floppy-disk mr-1"></i> Salvar Alterações
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Settings Sections Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <!-- Section 1: CyberBot AI Preferences -->
+                    <div class="bg-gray-900/80 border border-gray-800 rounded-xl p-5 space-y-4">
+                        <h3 class="text-base font-bold text-white flex items-center gap-2 border-b border-gray-800 pb-3">
+                            <i class="fa-solid fa-robot text-brand-400"></i> CyberBot AI
+                        </h3>
+
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-semibold text-gray-300">Perfil / Personalidade da IA</label>
+                            <select id="settingAiPersonality" class="w-full bg-gray-800 border border-gray-700 text-xs text-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:border-brand-500">
+                                <option value="balanced">Equilibrado (Recomendado)</option>
+                                <option value="cost_effective">Foco em Custo-Benefício & Promoções</option>
+                                <option value="enthusiast">Entusiasta & Desempenho Máximo (High-End)</option>
+                                <option value="technical">Técnico Avançado & Overclocking</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-semibold text-gray-300">Detalhes das Respostas</label>
+                            <select id="settingAiDetail" class="w-full bg-gray-800 border border-gray-700 text-xs text-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:border-brand-500">
+                                <option value="normal">Direto e Objetivo (Padrão)</option>
+                                <option value="detailed">Explicativo e Detalhado</option>
+                            </select>
+                        </div>
+
+                        <div class="pt-2 border-t border-gray-800 flex justify-between items-center">
+                            <div>
+                                <h4 class="text-xs font-semibold text-gray-200">Histórico do Chat</h4>
+                                <p class="text-[11px] text-gray-400">Apagar mensagens trocadas nesta sessão</p>
+                            </div>
+                            <button onclick="clearChatHistory()" class="text-xs bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-lg transition">
+                                <i class="fa-solid fa-trash-can mr-1"></i> Limpar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: PC Builder Parameters -->
+                    <div class="bg-gray-900/80 border border-gray-800 rounded-xl p-5 space-y-4">
+                        <h3 class="text-base font-bold text-white flex items-center gap-2 border-b border-gray-800 pb-3">
+                            <i class="fa-solid fa-screwdriver-wrench text-brand-400"></i> Verificador de Compatibilidade
+                        </h3>
+
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-semibold text-gray-300">Margem de Folga de Fonte (PSU)</label>
+                            <select id="settingPsuMargin" class="w-full bg-gray-800 border border-gray-700 text-xs text-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:border-brand-500">
+                                <option value="10">+10% de Margem (Requisito Mínimo)</option>
+                                <option value="20" selected>+20% de Margem (Recomendado)</option>
+                                <option value="30">+30% de Margem (Futuros Upgrades)</option>
+                            </select>
+                            <p class="text-[10px] text-gray-400">Calcula watts adicionais ao validar o setup do PC.</p>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-semibold text-gray-300">Preferência de Plataforma CPU</label>
+                            <select id="settingCpuPref" class="w-full bg-gray-800 border border-gray-700 text-xs text-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:border-brand-500">
+                                <option value="all">Sem preferência (AMD / Intel)</option>
+                                <option value="amd">AMD Ryzen</option>
+                                <option value="intel">Intel Core</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Profile & Store Preferences -->
+                    <div class="bg-gray-900/80 border border-gray-800 rounded-xl p-5 space-y-4">
+                        <h3 class="text-base font-bold text-white flex items-center gap-2 border-b border-gray-800 pb-3">
+                            <i class="fa-solid fa-user-gear text-brand-400"></i> Perfil VIP do Cliente
+                        </h3>
+
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-semibold text-gray-300">Nome de Exibição</label>
+                            <input type="text" id="settingUserName" value="Cliente VIP" class="w-full bg-gray-800 border border-gray-700 text-xs text-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:border-brand-500">
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-semibold text-gray-300">CEP Padrão (Cálculo de Frete)</label>
+                            <input type="text" id="settingUserCep" value="80000-000" placeholder="00000-000" class="w-full bg-gray-800 border border-gray-700 text-xs text-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:border-brand-500">
+                        </div>
+
+                        <div class="flex items-center justify-between pt-1">
+                            <span class="text-xs font-semibold text-gray-300">Notificações por E-mail</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="settingNotifyEmail" checked class="sr-only peer">
+                                <div class="w-9 h-5 bg-gray-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand-500"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Section 4: System & Appearance -->
+                    <div class="bg-gray-900/80 border border-gray-800 rounded-xl p-5 space-y-4">
+                        <h3 class="text-base font-bold text-white flex items-center gap-2 border-b border-gray-800 pb-3">
+                            <i class="fa-solid fa-palette text-brand-400"></i> Aparência & Sistema
+                        </h3>
+
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-semibold text-gray-300">Tema Visual</label>
+                            <select id="settingTheme" class="w-full bg-gray-800 border border-gray-700 text-xs text-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:border-brand-500">
+                                <option value="dark">Dark Cyber (Padrão)</option>
+                                <option value="rgb">Neon Gaming Accent</option>
+                            </select>
+                        </div>
+
+                        <div class="pt-4 flex flex-col gap-2">
+                            <p class="text-[11px] text-gray-400">Versão da Plataforma: <span class="font-mono text-gray-300">v2.6.0-PRO (Build 2026)</span></p>
+                            <div class="p-3 bg-brand-500/10 border border-brand-500/20 rounded-xl text-xs text-brand-300 flex items-center gap-2">
+                                <i class="fa-solid fa-shield-halved text-brand-400"></i>
+                                <span>Suporte VIP e garantia estendida ativos.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <div id="cartModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex justify-end transition-opacity duration-300 opacity-0 pointer-events-none">
+        <div class="w-full max-w-md bg-darkcard border-l border-darkborder h-full flex flex-col shadow-2xl transform translate-x-full transition-transform duration-300" id="cartContainer">
+            
+            <!-- Cart Header -->
+            <div class="p-5 border-b border-darkborder flex items-center justify-between bg-gray-900/50">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-cart-shopping text-brand-400 text-xl"></i>
+                    <h3 class="text-lg font-bold text-white">Seu Carrinho</h3>
+                </div>
+                <button onclick="toggleCartModal()" class="text-gray-400 hover:text-white p-2 rounded-lg">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Cart Items List -->
+            <div id="cartItemsList" class="flex-grow overflow-y-auto p-5 space-y-4">
+                <!-- Dynamic Items -->
+            </div>
+
+            <!-- Cart Footer & Checkout -->
+            <div class="p-5 border-t border-darkborder bg-gray-900/80 space-y-3">
+                <div class="flex justify-between text-xs text-gray-400">
+                    <span>Subtotal:</span>
+                    <span id="cartSubtotal" class="font-mono text-gray-200">R$ 0,00</span>
+                </div>
+                <div class="flex justify-between text-xs text-gray-400">
+                    <span>Frete (Brasil):</span>
+                    <span class="text-emerald-400 font-semibold">GRÁTIS</span>
+                </div>
+                <div class="flex justify-between text-base font-bold text-white border-t border-gray-800 pt-3">
+                    <span>Total:</span>
+                    <span id="cartTotal" class="text-emerald-400 font-mono text-xl">R$ 0,00</span>
+                </div>
+
+                <button onclick="checkout()" id="checkoutBtn" disabled class="w-full bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition shadow-lg glow-emerald">
+                    <i class="fa-solid fa-lock mr-2"></i>Finalizar Compra (Pix / Cartão)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="productModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity">
+        <div class="bg-darkcard border border-darkborder rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative overflow-hidden max-h-[90vh] overflow-y-auto">
+            <button onclick="closeProductModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white bg-gray-800 p-2 rounded-full">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div id="productModalContent">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed bottom-6 right-6 z-50">
+        <!-- Floating Toggle Button -->
+        <button onclick="toggleChatModal()" class="group relative bg-gradient-to-r from-brand-500 to-indigo-600 text-white p-4 rounded-2xl shadow-2xl hover:scale-105 transition-all glow-cyan flex items-center justify-center">
+            <i class="fa-solid fa-robot text-2xl group-hover:rotate-12 transition-transform"></i>
+            <span class="absolute -top-1 -right-1 flex h-3.5 w-3.5">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500"></span>
+            </span>
+        </button>
+    </div>
+
+    <!-- AI Chatbot Drawer/Window -->
+    <div id="chatModal" class="fixed bottom-24 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-96 h-[540px] bg-darkcard border border-darkborder rounded-2xl shadow-2xl flex flex-col transition-all duration-300 transform scale-95 opacity-0 pointer-events-none overflow-hidden">
+        
+        <!-- Chat Header -->
+        <div class="p-4 bg-gradient-to-r from-gray-900 via-darkcard to-brand-900 border-b border-darkborder flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-lg bg-brand-500/20 border border-brand-500/40 flex items-center justify-center text-brand-400">
+                    <i class="fa-solid fa-microchip text-lg"></i>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-white flex items-center gap-1.5">
+                        CyberBot AI
+                        <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded font-mono">ONLINE</span>
+                    </h4>
+                    <p class="text-[11px] text-gray-400">Especialista em Hardware TechParts</p>
+                </div>
+            </div>
+            <button onclick="toggleChatModal(false)" class="text-gray-400 hover:text-white p-1">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Quick AI Suggestion Pills -->
+        <div class="p-2 border-b border-darkborder bg-gray-900/60 flex items-center gap-2 overflow-x-auto text-[11px] no-scrollbar">
+            <button onclick="sendQuickPrompt('Recomende um PC Gamer até R$ 5.000')" class="whitespace-nowrap bg-gray-800 hover:bg-gray-700 text-brand-300 border border-gray-700 px-2.5 py-1 rounded-full transition">
+                💡 PC R$ 5.000
+            </button>
+            <button onclick="sendQuickPrompt('Qual a diferença entre memórias DDR4 e DDR5?')" class="whitespace-nowrap bg-gray-800 hover:bg-gray-700 text-brand-300 border border-gray-700 px-2.5 py-1 rounded-full transition">
+                ⚡ DDR4 vs DDR5
+            </button>
+            <button onclick="sendQuickPrompt('Como saber se a fonte de alimentação é suficiente?')" class="whitespace-nowrap bg-gray-800 hover:bg-gray-700 text-brand-300 border border-gray-700 px-2.5 py-1 rounded-full transition">
+                🔌 Calcular Fonte
+            </button>
+        </div>
+
+        <!-- Messages Area -->
+        <div id="chatMessages" class="flex-grow p-4 overflow-y-auto space-y-3 text-xs">
+            <!-- Messages inserted dynamically -->
+        </div>
+
+        <!-- Chat Input Form -->
+        <form onsubmit="handleChatSubmit(event)" class="p-3 border-t border-darkborder bg-gray-900/90 flex gap-2">
+            <input type="text" id="chatInput" placeholder="Pergunte sobre peças, compatibilidade..." 
+                class="flex-1 bg-gray-800 text-xs text-gray-100 px-3 py-2.5 rounded-xl border border-gray-700 focus:outline-none focus:border-brand-500">
+            <button type="submit" id="chatSendBtn" class="bg-brand-500 hover:bg-brand-600 text-white px-3.5 py-2.5 rounded-xl transition flex items-center justify-center">
+                <i class="fa-solid fa-paper-plane text-xs"></i>
+            </button>
+        </form>
+    </div>
+
+    <div id="toastContainer" class="fixed top-24 right-6 z-50 space-y-2 pointer-events-none"></div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900/80 border-t border-darkborder mt-12 py-8 text-xs text-gray-400">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-microchip text-brand-400 text-lg"></i>
+                <span class="font-bold text-gray-200">TechParts Pro &copy; 2026</span>
+                <span>- Loja de Hardware com Assistente IA</span>
+            </div>
+            <div class="flex space-x-6 text-gray-400">
+                <span class="hover:text-gray-200 cursor-pointer">Garantia & Trocas</span>
+                <span class="hover:text-gray-200 cursor-pointer">Termos de Serviço</span>
+                <span class="hover:text-gray-200 cursor-pointer">Atendimento IA</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /* Global Settings State */
+        let userSettings = {
+            aiPersonality: 'balanced',
+            aiDetail: 'normal',
+            psuMargin: 20,
+            cpuPref: 'all',
+            userName: 'Cliente VIP',
+            userCep: '80000-000',
+            notifyEmail: true,
+            theme: 'dark'
+        };
+
+        /* Products Database */
+        const PRODUCTS_DATA = [
+            {
+                id: 'cpu-1',
+                name: 'Processador AMD Ryzen 7 7800X3D',
+                category: 'cpus',
+                price: 2899.90,
+                rating: 4.9,
+                reviews: 142,
+                image: 'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=500&auto=format&fit=crop&q=80',
+                specs: {
+                    socket: 'AM5',
+                    cores: '8 Cores / 16 Threads',
+                    clock: '4.2GHz (5.0GHz Turbo)',
+                    tdp: '120W',
+                    ramSupport: 'DDR5'
+                },
+                description: 'O melhor processador para jogos do mundo com tecnologia 3D V-Cache avançada.'
+            },
+            {
+                id: 'cpu-2',
+                name: 'Processador Intel Core i7-14700K',
+                category: 'cpus',
+                price: 2649.00,
+                rating: 4.8,
+                reviews: 98,
+                image: 'https://images.unsplash.com/photo-1555680202-c86f0e12f086?w=500&auto=format&fit=crop&q=80',
+                specs: {
+                    socket: 'LGA1700',
+                    cores: '20 Cores (8P + 12E)',
+                    clock: '3.4GHz (5.6GHz Turbo)',
+                    tdp: '125W',
+                    ramSupport: 'DDR5/DDR4'
+                },
+                description: 'Desempenho devastador para jogos e criação de conteúdo profissional.'
+            },
+            {
+                id: 'cpu-3',
+                name: 'Processador AMD Ryzen 5 5600',
+                category: 'cpus',
+                price: 849.90,
+                rating: 4.7,
+                reviews: 310,
+                image: 'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=500&auto=format&fit=crop&q=80',
+                specs: {
+                    socket: 'AM4',
+                    cores: '6 Cores / 12 Threads',
+                    clock: '3.5GHz (4.4GHz Turbo)',
+                    tdp: '65W',
+                    ramSupport: 'DDR4'
+                },
+                description: 'Custo-benefício imbatível para montagens de PC Gamer intermediário.'
+            },
+            {
+                id: 'gpu-1',
+                name: 'Placa de Vídeo RTX 4070 Ti Super 16GB ASUS ROG',
+                category: 'gpus',
+                price: 5999.00,
+                rating: 4.9,
+                reviews: 76,
+                image: 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=500&auto=format&fit=crop&q=80',
+                specs: {
+                    vram: '16GB GDDR6X',
+                    bus: '256-bit',
+                    tdp: '285W',
+                    recPsu: '750W'
+                },
+                description: 'Ray Tracing de alta precisão e DLSS 3 para rodar tudo em Quad HD / 4K.'
+            },
+            {
+                id: 'gpu-2',
+                name: 'Placa de Vídeo AMD Radeon RX 7800 XT 16GB Sapphire',
+                category: 'gpus',
+                price: 3699.90,
+                rating: 4.8,
+                reviews: 88,
+                image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500&auto=format&fit=crop&q=80',
+                specs: {
+                    vram: '16GB GDDR6',
+                    bus: '256-bit',
+                    tdp: '263W',
+                    recPsu: '700W'
+                },
+                description: 'Excelente performance nativa em 1440p com arquitetura RDNA 3.'
+            },
+            {
+                id: 'mobo-1',
+                name: 'Placa-Mãe ASUS ROG Strix B650-A Gaming WiFi',
+                category: 'motherboards',
+                price: 1899.00,
+                rating: 4.8,
+                reviews: 54,
+                image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&auto=format&fit=crop&q=80',
+                specs: {
+                    socket: 'AM5',
+                    ramType: 'DDR5',
+                    slotsRam: 4,
+                    chipset: 'B650'
+                },
+                description: 'VRM robusto e conectividade PCIe 5.0 para os mais recentes processadores Ryzen 7000/8000.'
+            },
+            {
+                id: 'mobo-2',
+                name: 'Placa-Mãe MSI MAG B760 Tomahawk WiFi',
+                category: 'motherboards',
+                price: 1499.00,
+                rating: 4.7,
+                reviews: 42,
+                image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&auto=format&fit=crop&q=80',
+                specs: {
+                    socket: 'LGA1700',
+                    ramType: 'DDR5',
+                    slotsRam: 4,
+                    chipset: 'B760'
+                },
+                description: 'Construção premium com dissipadores estendidos para Intel 12ª, 13ª e 14ª Geração.'
+            },
+            {
+                id: 'ram-1',
+                name: 'Memória Corsair Vengeance RGB 32GB (2x16GB) DDR5 6000MHz',
+                category: 'ram',
+                price: 949.90,
+                rating: 4.9,
+                reviews: 112,
+                image: 'https://images.unsplash.com/photo-1562976540-1502c2145186?w=500&auto=format&fit=crop&q=80',
+                specs: {
+                    ramType: 'DDR5',
+                    capacity: '32GB (2x16GB)',
+                    freq: '6000MHz',
+                    latency: 'CL30'
+                },
+                description: 'Alta velocidade e perfil EXPO/XMP 3.0 para estabilidade máxima em jogos.'
+            },
+            {
+                id: 'ram-2',
+                name: 'Memória Kingston FURY Beast 16GB (2x8GB) DDR4 3200MHz',
+                category: 'ram',
+                price: 329.90,
+                rating: 4.8,
+                reviews: 210,
+                image: 'https://images.unsplash.com/photo-1562976540-1502c2145186?w=500&auto=format&fit=crop&q=80',
+                specs: {
+                    ramType: 'DDR4',
+                    capacity: '16GB (2x8GB)',
+                    freq: '3200MHz',
+                    latency: 'CL16'
+                },
+                description: 'Design elegante de baixo perfil e alta confiabilidade.'
+            },
+            {
+                id: 'ssd-1',
+                name: 'SSD Kingston KC3000 1TB M.2 NVMe PCIe 4.0',
+                category: 'storage',
+                price: 589.90,
+                rating: 4.9,
+                reviews: 165,
+                image: 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=500&auto=format&fit=crop&q=80',
+                specs: {
+                    capacity: '1TB',
+                    read: '7000 MB/s',
+                    write: '6000 MB/s'
+                },
+                description: 'Velocidade ultra rápida para tempos de carregamento instantâneos em jogos e SO.'
+            },
+            {
+                id: 'psu-1',
+                name: 'Fonte Corsair RM850x 850W 80 Plus Gold Modular',
+                category: 'psu',
+                price: 899.90,
+                rating: 4.9,
+                reviews: 89,
+                image: 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=500&auto=format&fit=crop&q=80',
+                specs: {
+                    wattage: 850,
+                    efficiency: '80 Plus Gold',
+                    modular: 'Full Modular'
+                },
+                description: 'Energia limpa, silenciosa e eficiente com capacitores 100% japoneses.'
+            },
+            {
+                id: 'psu-2',
+                name: 'Fonte MSI MAG A650BN 650W 80 Plus Bronze',
+                category: 'psu',
+                price: 329.90,
+                rating: 4.7,
+                reviews: 198,
+                image: 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=500&auto=format&fit=crop&q=80',
+                specs: {
+                    wattage: 650,
+                    efficiency: '80 Plus Bronze',
+                    modular: 'Não Modular'
+                },
+                description: 'A escolha perfeita de 650W com proteção de grau industrial.'
+            },
+            {
+                id: 'case-1',
+                name: 'Gabinete Gamer Lian Li O11 Dynamic EVO Black',
+                category: 'cases',
+                price: 1199.00,
+                rating: 4.9,
+                reviews: 64,
+                image: 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=500&auto=format&fit=crop&q=80',
+                specs: {
+                    type: 'Mid Tower',
+                    glass: 'Vidro Duplo Tempered',
+                    gpuSupport: 'Até 420mm'
+                },
+                description: 'Gabinete aquário ícone da comunidade gamer com suporte extensivo a Water Coolers.'
+            }
+        ];
+
+        /* Categories Map */
+        const CATEGORIES = [
+            { id: 'all', name: 'Todos os Produtos', icon: 'fa-border-all' },
+            { id: 'cpus', name: 'Processadores (CPUs)', icon: 'fa-microchip' },
+            { id: 'gpus', name: 'Placas de Vídeo (GPUs)', icon: 'fa-tv' },
+            { id: 'motherboards', name: 'Placas-Mãe', icon: 'fa-chess-board' },
+            { id: 'ram', name: 'Memória RAM', icon: 'fa-memory' },
+            { id: 'storage', name: 'Armazenamento (SSD)', icon: 'fa-hard-drive' },
+            { id: 'psu', name: 'Fontes de Energia', icon: 'fa-plug' },
+            { id: 'cases', name: 'Gabinetes', icon: 'fa-box font-normal' }
+        ];
+
+        let currentCategory = 'all';
+        let searchQuery = '';
+        let cart = [];
+        let pcBuilderSlots = {
+            cpu: null,
+            motherboard: null,
+            ram: null,
+            gpu: null,
+            psu: null,
+            storage: null,
+            case: null
+        };
+
+        /* Chatbot History State */
+        let chatHistory = [
+            {
+                sender: 'bot',
+                text: 'Olá! Sou o **CyberBot AI**, seu especialista de hardware aqui na TechParts Pro. Posso te ajudar a escolher a melhor placa de vídeo, indicar se as peças do seu PC são compatíveis ou sugerir uma montagem completa. Como posso te ajudar hoje?'
+            }
+        ];
+
+        /* Initialization */
+        window.addEventListener('DOMContentLoaded', () => {
+            loadUserSettings();
+            renderCategories();
+            renderProducts();
+            renderBuilderSlots();
+            renderChatMessages();
+        });
+
+        function loadUserSettings() {
+            const saved = localStorage.getItem('techparts_settings');
+            if (saved) {
+                try {
+                    userSettings = { ...userSettings, ...JSON.parse(saved) };
+                } catch (e) {
+                    console.error('Error parsing settings:', e);
+                }
+            }
+
+            // Sync form elements if present
+            document.getElementById('settingAiPersonality').value = userSettings.aiPersonality;
+            document.getElementById('settingAiDetail').value = userSettings.aiDetail;
+            document.getElementById('settingPsuMargin').value = userSettings.psuMargin;
+            document.getElementById('settingCpuPref').value = userSettings.cpuPref;
+            document.getElementById('settingUserName').value = userSettings.userName;
+            document.getElementById('settingUserCep').value = userSettings.userCep;
+            document.getElementById('settingNotifyEmail').checked = userSettings.notifyEmail;
+            document.getElementById('settingTheme').value = userSettings.theme;
+        }
+
+        function saveUserSettings() {
+            userSettings.aiPersonality = document.getElementById('settingAiPersonality').value;
+            userSettings.aiDetail = document.getElementById('settingAiDetail').value;
+            userSettings.psuMargin = parseInt(document.getElementById('settingPsuMargin').value) || 20;
+            userSettings.cpuPref = document.getElementById('settingCpuPref').value;
+            userSettings.userName = document.getElementById('settingUserName').value.trim() || 'Cliente VIP';
+            userSettings.userCep = document.getElementById('settingUserCep').value.trim() || '80000-000';
+            userSettings.notifyEmail = document.getElementById('settingNotifyEmail').checked;
+            userSettings.theme = document.getElementById('settingTheme').value;
+
+            localStorage.setItem('techparts_settings', JSON.stringify(userSettings));
+            checkCompatibility();
+            showToast('Configurações salvas com sucesso!', 'success');
+        }
+
+        function resetSettingsToDefault() {
+            userSettings = {
+                aiPersonality: 'balanced',
+                aiDetail: 'normal',
+                psuMargin: 20,
+                cpuPref: 'all',
+                userName: 'Cliente VIP',
+                userCep: '80000-000',
+                notifyEmail: true,
+                theme: 'dark'
+            };
+
+            document.getElementById('settingAiPersonality').value = userSettings.aiPersonality;
+            document.getElementById('settingAiDetail').value = userSettings.aiDetail;
+            document.getElementById('settingPsuMargin').value = userSettings.psuMargin;
+            document.getElementById('settingCpuPref').value = userSettings.cpuPref;
+            document.getElementById('settingUserName').value = userSettings.userName;
+            document.getElementById('settingUserCep').value = userSettings.userCep;
+            document.getElementById('settingNotifyEmail').checked = userSettings.notifyEmail;
+            document.getElementById('settingTheme').value = userSettings.theme;
+
+            localStorage.removeItem('techparts_settings');
+            checkCompatibility();
+            showToast('Configurações restauradas para o padrão.', 'info');
+        }
+
+        function clearChatHistory() {
+            chatHistory = [
+                {
+                    sender: 'bot',
+                    text: `Olá, **${userSettings.userName}**! Histórico resetado. Sou o **CyberBot AI**, como posso ajudar seu projeto de hardware hoje?`
+                }
+            ];
+            renderChatMessages();
+            showToast('Histórico da IA limpo!', 'info');
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                el.classList.remove('active-tab', 'text-brand-400', 'bg-brand-500/10', 'border', 'border-brand-500/20');
+                el.classList.add('text-gray-400');
+            });
+
+            const activeTabContent = document.getElementById(`tab-${tabId}`);
+            if (activeTabContent) activeTabContent.classList.remove('hidden');
+
+            const activeNavBtn = document.getElementById(`nav-${tabId}`);
+            if (activeNavBtn) {
+                activeNavBtn.classList.add('active-tab', 'text-brand-400', 'bg-brand-500/10', 'border', 'border-brand-500/20');
+                activeNavBtn.classList.remove('text-gray-400');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderCategories() {
+            const container = document.getElementById('categoryFilterContainer');
+            container.innerHTML = CATEGORIES.map(cat => `
+                <button onclick="setCategory('${cat.id}')" 
+                    class="flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border ${
+                        currentCategory === cat.id 
+                            ? 'bg-brand-500 text-white border-brand-400 shadow-lg glow-cyan' 
+                            : 'bg-darkcard text-gray-300 border-gray-800 hover:border-gray-700 hover:text-white'
+                    }">
+                    <i class="fa-solid ${cat.icon}"></i>
+                    <span>${cat.name}</span>
+                </button>
+            `).join('');
+        }
+
+        function setCategory(catId) {
+            currentCategory = catId;
+            renderCategories();
+            renderProducts();
+        }
+
+        function handleSearch() {
+            searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            renderProducts();
+        }
+
+        function handleMobileSearch() {
+            searchQuery = document.getElementById('mobileSearchInput').value.toLowerCase();
+            renderProducts();
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            const countEl = document.getElementById('productCount');
+
+            let filtered = PRODUCTS_DATA.filter(p => {
+                const matchCat = currentCategory === 'all' || p.category === currentCategory;
+                const matchSearch = p.name.toLowerCase().includes(searchQuery) || 
+                                    p.description.toLowerCase().includes(searchQuery);
+                return matchCat && matchSearch;
+            });
+
+            countEl.innerText = `${filtered.length} produto(s) encontrado(s)`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-16 text-center text-gray-400 space-y-3">
+                        <i class="fa-solid fa-magnifying-glass text-4xl text-gray-600"></i>
+                        <p class="text-base">Nenhum componente encontrado para esta busca.</p>
+                        <button onclick="setCategory('all'); document.getElementById('searchInput').value='';" class="text-xs text-brand-400 hover:underline">Limpar filtros</button>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(p => `
+                <div class="bg-darkcard border border-darkborder rounded-2xl p-4 flex flex-col justify-between hover:border-brand-500/50 transition-all duration-300 group shadow-lg">
+                    <div>
+                        <div class="relative w-full h-44 rounded-xl overflow-hidden bg-gray-900 mb-4 flex items-center justify-center">
+                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x300/1e293b/0ea5e9?text=Hardware'">
+                            <span class="absolute top-2 right-2 bg-gray-900/80 backdrop-blur-md px-2 py-1 rounded-lg text-[10px] font-mono text-amber-400 flex items-center gap-1 border border-amber-500/20">
+                                <i class="fa-solid fa-star text-amber-400"></i> ${p.rating}
+                            </span>
+                        </div>
+
+                        <span class="text-[10px] uppercase font-mono tracking-wider text-brand-400 font-semibold">${p.category}</span>
+                        <h3 class="text-sm font-bold text-white line-clamp-2 mt-1 mb-2 group-hover:text-brand-300 transition-colors">${p.name}</h3>
+                        <p class="text-xs text-gray-400 line-clamp-2 mb-4">${p.description}</p>
+                    </div>
+
+                    <div class="border-t border-gray-800 pt-3 mt-2 flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] text-gray-400 block">À vista no PIX</span>
+                            <span class="text-lg font-extrabold text-emerald-400 font-mono">R$ ${p.price.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+                        </div>
+                        <div class="flex gap-1">
+                            <button onclick="openProductModal('${p.id}')" title="Ver Detalhes" class="bg-gray-800 hover:bg-gray-700 text-gray-300 p-2.5 rounded-xl transition border border-gray-700">
+                                <i class="fa-solid fa-eye text-xs"></i>
+                            </button>
+                            <button onclick="addToCart('${p.id}')" title="Adicionar ao Carrinho" class="bg-brand-500 hover:bg-brand-600 text-white p-2.5 rounded-xl transition shadow glow-cyan">
+                                <i class="fa-solid fa-cart-plus text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openProductModal(productId) {
+            const p = PRODUCTS_DATA.find(item => item.id === productId);
+            if (!p) return;
+
+            const modal = document.getElementById('productModal');
+            const content = document.getElementById('productModalContent');
+
+            const specsList = Object.entries(p.specs).map(([key, val]) => `
+                <div class="flex justify-between py-1 border-b border-gray-800 text-xs">
+                    <span class="text-gray-400 capitalize">${key}:</span>
+                    <span class="font-mono text-gray-200">${val}</span>
+                </div>
+            `).join('');
+
+            content.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="rounded-xl overflow-hidden bg-gray-900 h-64 flex items-center justify-center">
+                        <img src="${p.image}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="space-y-4">
+                        <span class="text-xs font-mono uppercase text-brand-400 font-bold">${p.category}</span>
+                        <h2 class="text-xl font-bold text-white">${p.name}</h2>
+                        <p class="text-xs text-gray-300 leading-relaxed">${p.description}</p>
+
+                        <div class="bg-gray-900/80 p-3 rounded-xl border border-gray-800 space-y-1">
+                            <h4 class="text-xs font-bold text-brand-300 mb-2">Especificações Técnicas</h4>
+                            ${specsList}
+                        </div>
+
+                        <div class="pt-2 flex items-center justify-between">
+                            <span class="text-2xl font-extrabold text-emerald-400 font-mono">R$ ${p.price.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+                            <div class="flex gap-2">
+                                <button onclick="askBotAboutProduct('${p.name}')" class="bg-purple-600/30 hover:bg-purple-600/50 text-purple-300 text-xs font-semibold px-3 py-2.5 rounded-xl border border-purple-500/40 transition">
+                                    <i class="fa-solid fa-robot mr-1"></i> Perguntar à IA
+                                </button>
+                                <button onclick="addToCart('${p.id}'); closeProductModal();" class="bg-brand-500 hover:bg-brand-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow glow-cyan">
+                                    Adicionar ao Carrinho
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function closeProductModal() {
+            document.getElementById('productModal').classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function addToCart(productId) {
+            const product = PRODUCTS_DATA.find(p => p.id === productId);
+            if (!product) return;
+
+            const existing = cart.find(item => item.id === productId);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartUI();
+            showToast(`"${product.name}" adicionado ao carrinho!`, 'success');
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartUI();
+            showToast('Item removido do carrinho.', 'info');
+        }
+
+        function changeCartQty(productId, delta) {
+            const item = cart.find(i => i.id === productId);
+            if (item) {
+                item.quantity += delta;
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    updateCartUI();
+                }
+            }
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById('cartBadge');
+            const itemsList = document.getElementById('cartItemsList');
+            const subtotalEl = document.getElementById('cartSubtotal');
+            const totalEl = document.getElementById('cartTotal');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+
+            const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
+            const totalPrice = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+
+            if (totalItems > 0) {
+                badge.innerText = totalItems;
+                badge.classList.remove('hidden');
+                checkoutBtn.disabled = false;
+            } else {
+                badge.classList.add('hidden');
+                checkoutBtn.disabled = true;
+            }
+
+            if (cart.length === 0) {
+                itemsList.innerHTML = `
+                    <div class="h-full flex flex-col items-center justify-center text-center text-gray-500 space-y-3 py-12">
+                        <i class="fa-solid fa-cart-arrow-down text-4xl"></i>
+                        <p class="text-sm">Seu carrinho está vazio.</p>
+                    </div>
+                `;
+            } else {
+                itemsList.innerHTML = cart.map(item => `
+                    <div class="bg-gray-900 border border-gray-800 rounded-xl p-3 flex gap-3 items-center">
+                        <img src="${item.image}" class="w-14 h-14 object-cover rounded-lg bg-gray-800">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-xs font-bold text-white truncate">${item.name}</h4>
+                            <span class="text-xs font-mono text-emerald-400">R$ ${(item.price * item.quantity).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+                            
+                            <div class="flex items-center gap-2 mt-2">
+                                <button onclick="changeCartQty('${item.id}', -1)" class="w-5 h-5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded flex items-center justify-center text-xs border border-gray-700">-</button>
+                                <span class="text-xs font-mono px-1.5 text-gray-200">${item.quantity}</span>
+                                <button onclick="changeCartQty('${item.id}', 1)" class="w-5 h-5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded flex items-center justify-center text-xs border border-gray-700">+</button>
+                            </div>
+                        </div>
+                        <button onclick="removeFromCart('${item.id}')" class="text-gray-500 hover:text-red-400 p-1">
+                            <i class="fa-solid fa-trash-can text-xs"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+
+            subtotalEl.innerText = `R$ ${totalPrice.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            totalEl.innerText = `R$ ${totalPrice.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        }
+
+        function toggleCartModal() {
+            const modal = document.getElementById('cartModal');
+            const container = document.getElementById('cartContainer');
+
+            if (modal.classList.contains('pointer-events-none')) {
+                modal.classList.remove('pointer-events-none', 'opacity-0');
+                container.classList.remove('translate-x-full');
+            } else {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                container.classList.add('translate-x-full');
+            }
+        }
+
+        function checkout() {
+            if (cart.length === 0) return;
+            const orderId = `#TP-${Math.floor(10000 + Math.random() * 90000)}`;
+            showToast(`Pedido ${orderId} gerado com sucesso! Redirecionando...`, 'success');
+            cart = [];
+            updateCartUI();
+            toggleCartModal();
+            
+            setTimeout(() => {
+                switchTab('orders');
+                document.getElementById('trackingOrderInput').value = orderId;
+                trackOrder();
+            }, 800);
+        }
+
+        const SLOT_TYPES = [
+            { key: 'cpu', label: 'Processador (CPU)', category: 'cpus', icon: 'fa-microchip' },
+            { key: 'motherboard', label: 'Placa-Mãe', category: 'motherboards', icon: 'fa-chess-board' },
+            { key: 'ram', label: 'Memória RAM', category: 'ram', icon: 'fa-memory' },
+            { key: 'gpu', label: 'Placa de Vídeo (GPU)', category: 'gpus', icon: 'fa-tv' },
+            { key: 'psu', label: 'Fonte de Alimentação', category: 'psu', icon: 'fa-plug' },
+            { key: 'storage', label: 'Armazenamento SSD', category: 'storage', icon: 'fa-hard-drive' },
+            { key: 'case', label: 'Gabinete', category: 'cases', icon: 'fa-box' }
+        ];
+
+        function renderBuilderSlots() {
+            const container = document.getElementById('builderSlotsContainer');
+            container.innerHTML = SLOT_TYPES.map(slot => {
+                const selectedProduct = pcBuilderSlots[slot.key];
+                const availableOptions = PRODUCTS_DATA.filter(p => p.category === slot.category);
+
+                return `
+                    <div class="bg-gray-900/80 border border-gray-800 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div class="flex items-center space-x-3 w-full sm:w-auto">
+                            <div class="w-10 h-10 rounded-lg ${selectedProduct ? 'bg-brand-500/20 text-brand-400 border border-brand-500/40' : 'bg-gray-800 text-gray-500'} flex items-center justify-center">
+                                <i class="fa-solid ${slot.icon} text-lg"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs text-gray-400 font-semibold block">${slot.label}</span>
+                                <span class="text-sm font-bold text-white">${selectedProduct ? selectedProduct.name : 'Pendente de seleção'}</span>
+                            </div>
+                        </div>
+
+                        <div class="w-full sm:w-64">
+                            <select onchange="selectBuilderItem('${slot.key}', this.value)" class="w-full bg-gray-800 border border-gray-700 text-xs text-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-brand-500">
+                                <option value="">-- Selecionar Componente --</option>
+                                ${availableOptions.map(p => `
+                                    <option value="${p.id}" ${selectedProduct && selectedProduct.id === p.id ? 'selected' : ''}>
+                                        ${p.name} - R$ ${p.price.toFixed(2)}
+                                    </option>
+                                `).join('')}
+                            </select>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            checkCompatibility();
+        }
+
+        function selectBuilderItem(slotKey, productId) {
+            if (!productId) {
+                pcBuilderSlots[slotKey] = null;
+            } else {
+                pcBuilderSlots[slotKey] = PRODUCTS_DATA.find(p => p.id === productId);
+            }
+            renderBuilderSlots();
+        }
+
+        function resetBuilder() {
+            Object.keys(pcBuilderSlots).forEach(key => pcBuilderSlots[key] = null);
+            renderBuilderSlots();
+            showToast('Setup do PC reiniciado.', 'info');
+        }
+
+        function checkCompatibility() {
+            const banner = document.getElementById('compatibilityBanner');
+            const title = document.getElementById('compatTitle');
+            const desc = document.getElementById('compatDesc');
+            const totalEl = document.getElementById('builderTotalPrice');
+            const addBtn = document.getElementById('addBuildToCartBtn');
+
+            const cpu = pcBuilderSlots.cpu;
+            const mobo = pcBuilderSlots.motherboard;
+            const ram = pcBuilderSlots.ram;
+            const gpu = pcBuilderSlots.gpu;
+            const psu = pcBuilderSlots.psu;
+
+            let errors = [];
+            let baseWatts = 150;
+
+            if (cpu) {
+                const tdp = parseInt(cpu.specs.tdp) || 100;
+                baseWatts += tdp;
+            }
+            if (gpu) {
+                const tdp = parseInt(gpu.specs.tdp) || 250;
+                baseWatts += tdp;
+            }
+
+            const marginMultiplier = 1 + (userSettings.psuMargin / 100);
+            const totalWatts = Math.round(baseWatts * marginMultiplier);
+
+            // Socket check
+            if (cpu && mobo) {
+                if (cpu.specs.socket !== mobo.specs.socket) {
+                    errors.push(`Incompatibilidade de Soquete: O processador é ${cpu.specs.socket}, mas a placa-mãe suporta ${mobo.specs.socket}.`);
+                }
+            }
+
+            // RAM Type check
+            if (ram && mobo) {
+                if (ram.specs.ramType !== mobo.specs.ramType) {
+                    errors.push(`Incompatibilidade de Memória: A placa-mãe exige ${mobo.specs.ramType}, mas a RAM selecionada é ${ram.specs.ramType}.`);
+                }
+            }
+
+            // PSU power check
+            if (psu) {
+                const psuWatts = psu.specs.wattage || 0;
+                if (psuWatts < totalWatts) {
+                    errors.push(`Fonte Insuficiente: O setup com folga de +${userSettings.psuMargin}% requer pelo menos ${totalWatts}W, mas a fonte tem ${psuWatts}W.`);
+                }
+            }
+
+            let totalPrice = 0;
+            let itemsCount = 0;
+            Object.values(pcBuilderSlots).forEach(item => {
+                if (item) {
+                    totalPrice += item.price;
+                    itemsCount++;
+                }
+            });
+
+            totalEl.innerText = `R$ ${totalPrice.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            document.getElementById('summarySocket').innerText = mobo ? mobo.specs.socket : (cpu ? cpu.specs.socket : 'Não especificado');
+            document.getElementById('summaryRamType').innerText = mobo ? mobo.specs.ramType : (ram ? ram.specs.ramType : 'Não especificado');
+            document.getElementById('summaryWatts').innerText = `${totalWatts} Watts (+${userSettings.psuMargin}%)`;
+            document.getElementById('summaryPsuWatts').innerText = psu ? `${psu.specs.wattage} Watts` : 'Nenhuma';
+
+            if (errors.length > 0) {
+                banner.className = 'mt-4 p-4 rounded-xl border bg-red-500/10 border-red-500/30 text-red-300 flex items-start gap-3';
+                banner.innerHTML = `
+                    <i class="fa-solid fa-triangle-exclamation text-xl text-red-400 mt-0.5"></i>
+                    <div>
+                        <h4 class="font-bold text-sm text-red-400">Atenção: Incompatibilidade Detectada</h4>
+                        <ul class="list-disc list-inside text-xs mt-1 space-y-1">
+                            ${errors.map(err => `<li>${err}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+                addBtn.disabled = true;
+            } else if (itemsCount > 0) {
+                banner.className = 'mt-4 p-4 rounded-xl border bg-emerald-500/10 border-emerald-500/30 text-emerald-300 flex items-start gap-3';
+                title.innerText = 'Configuração 100% Compatível!';
+                desc.innerText = `Todos os soquetes, memórias e requisito de energia (folga de +${userSettings.psuMargin}%) foram validados.`;
+                addBtn.disabled = false;
+            } else {
+                banner.className = 'mt-4 p-4 rounded-xl border bg-brand-500/10 border-brand-500/30 text-brand-300 flex items-start gap-3';
+                title.innerText = 'Aguardando Seleção';
+                desc.innerText = 'Selecione os componentes nos menus suspensos para iniciar o teste de compatibilidade.';
+                addBtn.disabled = true;
+            }
+        }
+
+        function addBuildToCart() {
+            let addedCount = 0;
+            Object.values(pcBuilderSlots).forEach(item => {
+                if (item) {
+                    addToCart(item.id);
+                    addedCount++;
+                }
+            });
+            if (addedCount > 0) {
+                showToast(`PC Completo com ${addedCount} peças adicionado ao carrinho!`, 'success');
+                toggleCartModal();
+            }
+        }
+
+        function askBotAboutBuild() {
+            const selectedItems = Object.entries(pcBuilderSlots)
+                .filter(([_, val]) => val !== null)
+                .map(([key, val]) => `${key.toUpperCase()}: ${val.name}`)
+                .join(', ');
+
+            if (!selectedItems) {
+                showToast('Selecione pelo menos um componente antes de consultar a IA.', 'warning');
+                return;
+            }
+
+            const prompt = `Analise este setup de PC que montei no site da TechParts Pro: [${selectedItems}]. Diga se é uma boa configuração para jogos/trabalho e onde posso melhorar.`;
+            toggleChatModal(true);
+            sendUserMessage(prompt);
+        }
+
+        function toggleChatModal(show) {
+            const modal = document.getElementById('chatModal');
+            const isVisible = !modal.classList.contains('pointer-events-none');
+            const shouldShow = show !== undefined ? show : !isVisible;
+
+            if (shouldShow) {
+                modal.classList.remove('opacity-0', 'pointer-events-none', 'scale-95');
+                modal.classList.add('scale-100');
+            } else {
+                modal.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+                modal.classList.remove('scale-100');
+            }
+        }
+
+        function renderChatMessages() {
+            const container = document.getElementById('chatMessages');
+            container.innerHTML = chatHistory.map(msg => `
+                <div class="flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}">
+                    <div class="max-w-[85%] rounded-2xl p-3 ${
+                        msg.sender === 'user' 
+                            ? 'bg-brand-600 text-white rounded-br-none' 
+                            : 'bg-gray-800 border border-gray-700 text-gray-200 rounded-bl-none'
+                    }">
+                        <div class="leading-relaxed font-sans text-xs whitespace-pre-wrap">${formatMarkdown(msg.text)}</div>
+                    </div>
+                </div>
+            `).join('');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function formatMarkdown(text) {
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/\n/g, '<br>');
+        }
+
+        function sendQuickPrompt(promptText) {
+            toggleChatModal(true);
+            sendUserMessage(promptText);
+        }
+
+        function askBotAboutProduct(productName) {
+            toggleChatModal(true);
+            sendUserMessage(`Gostaria de saber mais sobre o produto "${productName}". Vale a pena? Com quais peças combina melhor?`);
+        }
+
+        function handleChatSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
+            input.value = '';
+            sendUserMessage(text);
+        }
+
+        async function sendUserMessage(text) {
+            chatHistory.push({ sender: 'user', text: text });
+            renderChatMessages();
+
+            chatHistory.push({ sender: 'bot', text: '⚡ *CyberBot digitando e analisando catálogo...*' });
+            renderChatMessages();
+
+            try {
+                const responseText = await callGeminiAPI(text);
+                chatHistory.pop();
+                chatHistory.push({ sender: 'bot', text: responseText });
+            } catch (err) {
+                console.error('Erro na API Gemini:', err);
+                chatHistory.pop();
+                chatHistory.push({ 
+                    sender: 'bot', 
+                    text: generateSmartFallbackResponse(text) 
+                });
+            }
+            renderChatMessages();
+        }
+
+        async function callGeminiAPI(userQuery) {
+            const catalogSummary = PRODUCTS_DATA.map(p => 
+                `- ${p.name} (R$ ${p.price}): ${p.description} [Specs: ${JSON.stringify(p.specs)}]`
+            ).join('\n');
+
+            const systemPrompt = `Você é o CyberBot AI, assistente técnico especialista de hardware na TechParts Pro.
+Você está conversando com ${userSettings.userName}.
+
+Perfil do Assistente configurado pelo usuário:
+- Personalidade/Foco: ${userSettings.aiPersonality}
+- Nível de Detalhamento: ${userSettings.aiDetail}
+
+Catálogo disponível na loja hoje:
+${catalogSummary}
+
+Diretrizes:
+1. Recomende produtos do catálogo informando preços em Reais (R$).
+2. Se o cliente perguntar sobre compatibilidade, analise soquetes (AM5, LGA1700, AM4), DDR4 vs DDR5 e exigência de Fonte.
+3. Adapte sua resposta ao foco do usuário (${userSettings.aiPersonality}).
+4. Mantenha respostas com até 3 parágrafos curtos.`;
+
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`API responded with status ${response.status}`);
+            }
+
+            const data = await response.json();
+            const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            return text || 'Desculpe, não consegui processar sua dúvida agora. Posso te ajudar com outra questão de hardware?';
+        }
+
+        function generateSmartFallbackResponse(query) {
+            const q = query.toLowerCase();
+            if (q.includes('5000') || q.includes('5.000') || q.includes('orçamento') || q.includes('recomende')) {
+                return `**Sugestão de Setup até R$ 5.000 na TechParts Pro:**\n\n- **CPU:** AMD Ryzen 5 5600 (R$ 849,90)\n- **Placa-Mãe:** B550M AM4 (Aprox. R$ 750,00)\n- **GPU:** AMD RX 7800 XT ou RTX 3060 (R$ 2.500 - R$ 3.699)\n- **RAM:** Kingston 16GB DDR4 (R$ 329,90)\n- **Fonte:** MSI 650W 80 Plus (R$ 329,90)\n\nEssa máquina roda qualquer jogo atual em Full HD com alta taxa de quadros!`;
+            }
+            if (q.includes('ddr4') || q.includes('ddr5')) {
+                return `**Diferença principal entre DDR4 e DDR5:**\n\n- **DDR4:** Tecnologia estabelecida, excelente custo-benefício (frequências ~3200MHz).\n- **DDR5:** Nova geração com frequências muito mais altas (6000MHz+), ideal para processadores recentes como Ryzen 7000 e Intel 13ª/14ª Ger.\n\n*Nota:* Os encaixes físicos são diferentes! Certifique-se de que sua Placa-Mãe suporte a versão escolhida.`;
+            }
+            if (q.includes('fonte') || q.includes('watts') || q.includes('psu')) {
+                return `**Como escolher a Fonte correta:**\n\nPara calcular a potência ideal:\n1. Some o consumo TDP do Processador + Placa de Vídeo.\n2. Adicione 150W de margem para placa-mãe, SSDs e fans.\n\nPara GPUs como RTX 4070 Ti, recomendamos fontes de no mínimo **750W 80 Plus Gold**.`;
+            }
+            return `Com certeza! Nosso catálogo possui as melhores opções em CPUs, GPUs e memórias. Você pode utilizar a nossa aba **"Monte seu PC"** para validar soquetes e fontes automaticamente!`;
+        }
+
+        function trackOrder() {
+            const input = document.getElementById('trackingOrderInput').value.trim();
+            const resultDiv = document.getElementById('trackingResult');
+
+            if (!input) {
+                showToast('Digite um código de pedido válido.', 'warning');
+                return;
+            }
+
+            resultDiv.classList.remove('hidden');
+            resultDiv.innerHTML = `
+                <div class="flex justify-between items-center border-b border-gray-800 pb-3">
+                    <div>
+                        <span class="text-xs text-gray-400">Pedido:</span>
+                        <h4 class="text-base font-bold text-brand-400 font-mono">${input}</h4>
+                    </div>
+                    <span class="bg-emerald-500/20 text-emerald-400 text-xs px-2.5 py-1 rounded-full font-semibold border border-emerald-500/30">
+                        EM TRÂNSITO
+                    </span>
+                </div>
+
+                <div class="space-y-3 pt-2">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-white">Pagamento Aprovado</p>
+                            <span class="text-[10px] text-gray-500">Hoje às 09:15</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-box"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-white">Separação & Teste de Bancada Concluído</p>
+                            <span class="text-[10px] text-gray-500">Hoje às 11:30</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-brand-500/20 text-brand-400 flex items-center justify-center text-xs animate-pulse">
+                            <i class="fa-solid fa-truck-fast"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-brand-300">Coletado pela Transportadora Expressa</p>
+                            <span class="text-[10px] text-gray-400">Previsão de entrega: 2 dias úteis</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+
+            const icons = {
+                success: 'fa-circle-check text-emerald-400',
+                warning: 'fa-triangle-exclamation text-amber-400',
+                info: 'fa-circle-info text-brand-400'
+            };
+
+            toast.className = `pointer-events-auto bg-gray-900 border border-gray-700 text-gray-200 text-xs font-medium px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 transform translate-y-2 opacity-0 transition-all duration-300 max-w-xs`;
+            toast.innerHTML = `
+                <i class="fa-solid ${icons[type]} text-base"></i>
+                <span class="flex-1">${message}</span>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
